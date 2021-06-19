@@ -6,7 +6,7 @@ pygame.init()
 pygame.mixer.init()
 
 class Cita:
-        scena = 0  # variables constantes.
+        scena = 0
         limite_scenas = 3
         
         font = pygame.font.Font(None,50)
@@ -34,6 +34,7 @@ class Cita:
                 for img in waifu['imagenes']:
                         self.imagenes.append(pygame.transform.scale(pygame.image.load(img), window_size))
 
+                self.update()
 
         def select_option(self, event, click):
                 if event.type == pygame.MOUSEBUTTONDOWN:
@@ -42,6 +43,8 @@ class Cita:
                                         self.resultado.append(self.respuestas[self.scena][i])
                                         self.scena += 1
                                         click.play()
+                                        if self.scena < 2:
+                                                self.update()
                 
         def update_scenas(self, screen):
                 if self.scena < self.limite_scenas:
@@ -53,22 +56,24 @@ class Cita:
         def mostrar_scenas(self, screen):
                 screen.blit(self.imagenes[self.scena], (0,0))
                 
-                message = self.font.render(self.dialogo[self.scena],1,(0,0,0))
                 screen.blit(self.texto, (100,400))
-                screen.blit(message, (110, 405))
+                screen.blit(self.message, (110, 405))
                 
-                message = self.font.render(self.opciones[self.scena][0],1,(0,0,0))
                 screen.blit(self.boton, (100,450))
-                screen.blit(message, (110, 455))
+                screen.blit(self.botones[0], (110, 455))
                 
-                message = self.font.render(self.opciones[self.scena][1],1,(0,0,0))
                 screen.blit(self.boton, (100,500))
-                screen.blit(message, (110, 505))
+                screen.blit(self.botones[1], (110, 505))
                 
-                message = self.font.render(self.opciones[self.scena][2],1,(0,0,0))
                 screen.blit(self.boton, (100,550))
-                screen.blit(message, (110,555))
-        
+                screen.blit(self.botones[2], (110,555))
+
+        def update(self):
+                self.message = self.font.render(self.dialogo[self.scena],1,(0,0,0))
+                self.botones = []
+                for i in range(3):
+                        self.botones.append(self.font.render(self.opciones[self.scena][i],1,(0,0,0)))
+                        
         def __str__(self):
                 return str(int((sum(self.resultado)/len(self.resultado))*100)) + "%"
 
@@ -114,7 +119,6 @@ class Game:
                         self.clock.tick(30)
                         
         def restart_game(self, text=' Quieres jugar de nuevo? '):
-                
                 if self.push_button(text):
                         self.run_game()
                 else:
@@ -214,9 +218,6 @@ class Game:
         def exit_game(self):
                 pygame.quit()
                 sys.exit()
-
-        def background_music(self):
-                pygame.mixer.music.play(loops=-1, start=6)
 
         def set_waifus(self, data):
                 self.data = data
