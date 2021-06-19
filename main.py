@@ -43,7 +43,7 @@ class Cita:
                                         self.resultado.append(self.respuestas[self.scena][i])
                                         self.scena += 1
                                         click.play()
-                                        if self.scena < 2:
+                                        if self.scena < self.limite_scenas:
                                                 self.update()
                 
         def update_scenas(self, screen):
