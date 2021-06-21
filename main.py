@@ -289,7 +289,7 @@ c = {
                    ' Muy bien denji'],
         'opciones':[['Hi?','...','Hola...'],
                     ['Si, siempre listo', 'Tendré que ir de nuevo con Power', 'Aki siempre anda molesto'],
-                    ['No, todo bien', 'Esto es muy difícil', 'Trabajar con esos pendejos es un martirio'],
+                    ['No, todo bien', 'Esto es muy difícil', 'Trabajar es un martirio'],
                     ['Siempre', 'woaff', 'Como sea'],
                     ['…', '…Gracias', 'adios makima']],
         'respuestas':[[False, True, False],
