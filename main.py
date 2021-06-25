@@ -231,9 +231,6 @@ class Game(Click):
                 pygame.quit()
                 sys.exit()
 
-        def set_waifus(self, data):
-                self.data = data
-
 a = {
         'dialogo':[' Que hace un extraño aqui? !!! ...',
                    ' No eres un acosador verdad? !!! ...',
