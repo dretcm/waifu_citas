@@ -12,17 +12,18 @@ class Click:
                 sound.play()
 
 class Cita(Click):
-        def __init__(self, window_size, waifu):  # construye un nuevo objeto con nuevas variables.
+        def __init__(self, window, waifu):
                 super().__init__()
                 self.scena = 0
                 self.limite_scenas = 5
                 
-                self.font = pygame.font.Font(None,50)
+                self.fuente = pygame.font.Font(None,50)
         
-                self.window_size = window_size
+                self.window_size = window
+                
                 self.resultado = []
-                self.boton = pygame.transform.scale(pygame.image.load('imagenes/boton.jpg'), (window_size[0]-200, 40))
-                self.texto = pygame.transform.scale(pygame.image.load('imagenes/texto.jpg'), (window_size[0]-200, 40))
+                self.boton_img = pygame.transform.scale(pygame.image.load('imagenes/boton.jpg'), (self.window_size[0]-200, 40))
+                self.texto_img = pygame.transform.scale(pygame.image.load('imagenes/texto.jpg'), (self.window_size[0]-200, 40))
 
                 self.waifu = waifu['personaje']
 
@@ -32,14 +33,14 @@ class Cita(Click):
                 self.respuestas = waifu['respuestas']
                 
                 self.colliders = [
-                                pygame.Rect(100,450,window_size[0] - 200,40),
-                                pygame.Rect(100,500,window_size[0] - 200,40),
-                                pygame.Rect(100,550,window_size[0] - 200,40),
+                                pygame.Rect(100,450,self.window_size[0] - 200,40),
+                                pygame.Rect(100,500,self.window_size[0] - 200,40),
+                                pygame.Rect(100,550,self.window_size[0] - 200,40),
                                  ]
 
                 self.imagenes = []
                 for img in waifu['imagenes']:
-                        self.imagenes.append(pygame.transform.scale(pygame.image.load(img), window_size))
+                        self.imagenes.append(pygame.transform.scale(pygame.image.load(img), self.window_size))
 
                 self.update()
 
@@ -63,23 +64,23 @@ class Cita(Click):
         def mostrar_scenas(self, screen):
                 screen.blit(self.imagenes[self.scena], (0,0))
                 
-                screen.blit(self.texto, (100,400))
+                screen.blit(self.texto_img, (100,400))
                 screen.blit(self.message, (110, 405))
                 
-                screen.blit(self.boton, (100,450))
+                screen.blit(self.boton_img, (100,450))
                 screen.blit(self.botones[0], (110, 455))
                 
-                screen.blit(self.boton, (100,500))
+                screen.blit(self.boton_img, (100,500))
                 screen.blit(self.botones[1], (110, 505))
                 
-                screen.blit(self.boton, (100,550))
+                screen.blit(self.boton_img, (100,550))
                 screen.blit(self.botones[2], (110,555))
 
         def update(self):
-                self.message = self.font.render(self.dialogo[self.scena],1,(0,0,0))
+                self.message = self.fuente.render(self.dialogo[self.scena],1,(0,0,0))
                 self.botones = []
                 for i in range(3):
-                        self.botones.append(self.font.render(self.opciones[self.scena][i],1,(0,0,0)))
+                        self.botones.append(self.fuente.render(self.opciones[self.scena][i],1,(0,0,0)))
                         
         def __str__(self):
                 return str(int((sum(self.resultado)/len(self.resultado))*100)) + "%"
@@ -90,6 +91,7 @@ class Game(Click):
                 self.clock = pygame.time.Clock()
                 self.WINDOW_SIZE = (1200,600)
                 self.screen = pygame.display.set_mode(self.WINDOW_SIZE)
+                
                 self.data = data
 
                 self.fondo = pygame.transform.scale(pygame.image.load('imagenes/fondo.jpg'), self.WINDOW_SIZE)
@@ -123,24 +125,24 @@ class Game(Click):
                         pygame.display.update()
                         self.clock.tick(30)
                         
-        def restart_game(self, text=' Quieres jugar de nuevo? '):
-                if self.push_button(text):
+        def restart_game(self):
+                if self.push_button():
                         self.run_game()
                 else:
                         self.exit_game()
                         
-        def push_button(self, text):
-
-                font = pygame.font.Font(None,70)
+        def push_button(self):
+                
+                fuente = pygame.font.Font(None,70)
                 width = 120
                 height = 150
 
-                left = font.render(self.citas[0].__str__(), 1, (0,0,0))
+                left = fuente.render(self.citas[0].__str__(), 1, (0,0,0))
                 left_img = pygame.transform.scale(pygame.image.load(self.citas[0].waifu), (width, height))
                 left_collider = pygame.Rect(60,400, width, height)
                 left_on = False
 
-                right = font.render(self.citas[1].__str__(), 1, (0,0,0))
+                right = fuente.render(self.citas[1].__str__(), 1, (0,0,0))
                 right_img = pygame.transform.scale(pygame.image.load(self.citas[1].waifu), (width, height))
                 right_collider = pygame.Rect(1020,400, width, height)
                 right_on = False
@@ -149,13 +151,13 @@ class Game(Click):
 
                 pos_yes = (midle_x-110, midle_y+50)
                 yes = pygame.Rect(pos_yes[0], pos_yes[1], 90,50)
-                message_yes = font.render('Yes', 1, (0,0,0))
+                message_yes = fuente.render('Yes', 1, (0,0,0))
 
                 pos_no = (midle_x+20, midle_y+50)
                 no = pygame.Rect(pos_no[0], pos_no[1], 90,50)
-                message_no = font.render('No', 1, (0,0,0))
+                message_no = fuente.render('No', 1, (0,0,0))
                 
-                message = font.render(text,1,(0,0,0))
+                message = fuente.render(' Quieres jugar de nuevo? ',1,(0,0,0))
                 lenght = message.get_width()
                 pos_msg = (midle_x//2,midle_y-40)
 
